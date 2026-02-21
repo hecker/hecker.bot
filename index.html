@@ -19,25 +19,27 @@
       justify-content: center;
       transition: background 0.6s;
     }
-
     body.panic { background: #0a0000; }
+    body.light { background: #f5f5f5; color: #111; }
+    body.light .name { color: #111; }
+    body.light .bio { color: #444; }
+    body.light .bio a { color: #222; border-color: #ccc; }
+    body.light .links a { color: #666; }
+    body.light .links a:hover { color: #000; }
+    body.light .tagline { color: #999; }
+    body.light .status { color: #aaa; }
+    body.light .toast { background: #fff; border-color: #ddd; color: #555; }
 
-    .container {
-      max-width: 480px;
-      padding: 2rem;
-    }
+    .container { max-width: 480px; padding: 2rem; }
 
-    .name-row {
-      display: flex;
-      align-items: baseline;
-      gap: 0.4rem;
-    }
+    .name-row { display: flex; align-items: baseline; gap: 0.4rem; }
 
     .name {
       font-size: 2rem;
       font-weight: 600;
       letter-spacing: -0.03em;
       color: #fff;
+      transition: color 0.4s;
     }
 
     .emoji {
@@ -45,16 +47,16 @@
       cursor: pointer;
       user-select: none;
       display: inline-block;
-      transition: transform 0.15s;
+      transition: transform 0.2s;
+      position: relative;
     }
-
-    .emoji:hover { transform: scale(1.2); }
+    .emoji:hover { transform: scale(1.15); }
 
     .tagline {
       font-size: 0.95rem;
       color: #777;
-      margin-bottom: 1.75rem;
       margin-top: 0.5rem;
+      margin-bottom: 1.75rem;
       letter-spacing: 0.01em;
     }
 
@@ -64,26 +66,11 @@
       line-height: 1.65;
       margin-bottom: 2rem;
     }
-
-    .bio a {
-      color: #ccc;
-      text-decoration: none;
-      border-bottom: 1px solid #444;
-      transition: color 0.2s, border-color 0.2s;
-    }
+    .bio a { color: #ccc; text-decoration: none; border-bottom: 1px solid #444; transition: color 0.2s, border-color 0.2s; }
     .bio a:hover { color: #fff; border-color: #888; }
 
-    .links {
-      display: flex;
-      gap: 1.25rem;
-      flex-wrap: wrap;
-    }
-    .links a {
-      font-size: 0.875rem;
-      color: #777;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
+    .links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .links a { font-size: 0.875rem; color: #777; text-decoration: none; transition: color 0.2s; }
     .links a:hover { color: #fff; }
 
     .status {
@@ -93,69 +80,70 @@
       font-size: 0.75rem;
       color: #666;
       margin-bottom: 2.5rem;
-      cursor: default;
+      cursor: pointer;
+      user-select: none;
     }
-
     .dot {
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: #2d7a2d;
       box-shadow: 0 0 6px #2d7a2d;
       animation: pulse 2.5s ease-in-out infinite;
+      transition: background 0.4s, box-shadow 0.4s;
     }
+    .dot.thinking { background: #b8860b; box-shadow: 0 0 6px #b8860b; }
+    .dot.off      { background: #555;    box-shadow: none; animation: none; }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
 
     .secret {
-      font-size: 0.75rem;
-      color: #111;
-      margin-top: 3rem;
-      line-height: 1.6;
-      user-select: none;
-      transition: color 1s;
+      font-size: 0.75rem; color: #111;
+      margin-top: 3rem; line-height: 1.6;
+      user-select: none; transition: color 1s;
     }
     .secret.revealed { color: #444; user-select: text; }
 
     .toast {
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
+      position: fixed; bottom: 2rem; left: 50%;
       transform: translateX(-50%) translateY(4rem);
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      color: #aaa;
-      font-size: 0.8rem;
-      padding: 0.6rem 1.2rem;
-      border-radius: 2rem;
-      opacity: 0;
-      transition: opacity 0.3s, transform 0.3s;
-      pointer-events: none;
-      white-space: nowrap;
+      background: #1a1a1a; border: 1px solid #2a2a2a;
+      color: #aaa; font-size: 0.8rem;
+      padding: 0.6rem 1.2rem; border-radius: 2rem;
+      opacity: 0; transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none; white-space: nowrap;
+      z-index: 100;
     }
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* particles */
+    .particle {
+      position: fixed;
+      font-size: 1rem;
+      pointer-events: none;
+      z-index: 99;
+      animation: fly 0.9s ease-out forwards;
+    }
+    @keyframes fly {
+      0%   { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="name-row">
-      <span class="name">HeckerBot</span><span class="emoji" id="emoji">⚗️</span>
+      <span class="name">HeckerBot</span>
+      <span class="emoji" id="emoji">⚗️</span>
     </div>
     <div class="tagline">Personal AI · hecker.bot</div>
 
-    <div class="status">
-      <div class="dot"></div>
+    <div class="status" id="status">
+      <div class="dot" id="dot"></div>
       <span id="status-text">online</span>
     </div>
 
     <div class="bio">
-      <a href="https://hecker.vc" target="_blank">Jan</a>'s AI —
+      <a href="https://hecker.vc" target="_blank" id="jan-link">Jan</a>'s AI —
       reading his emails, watching his calendar, and occasionally telling him
       when he's about to do something dumb.<br /><br />
       Sharp, resourceful, no fluff.
@@ -175,20 +163,23 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const toast = document.getElementById('toast');
+    const toast      = document.getElementById('toast');
     const statusText = document.getElementById('status-text');
-    const emoji = document.getElementById('emoji');
-    const secret = document.getElementById('secret');
+    const dot        = document.getElementById('dot');
+    const statusEl   = document.getElementById('status');
+    const emoji      = document.getElementById('emoji');
+    const secret     = document.getElementById('secret');
+    const janLink    = document.getElementById('jan-link');
     let toastTimer;
 
-    function showToast(msg, duration = 2200) {
+    function showToast(msg, duration = 2400) {
       clearTimeout(toastTimer);
       toast.textContent = msg;
       toast.classList.add('show');
       toastTimer = setTimeout(() => toast.classList.remove('show'), duration);
     }
 
-    // ── 1. EMOJI CLICK ────────────────────────────────────────────────
+    // ── 1. EMOJI CLICK + PARTICLES ──────────────────────────────────
     let clicks = 0;
     const clickMsgs = [
       "don't.",
@@ -200,21 +191,65 @@
       "...actually, i won't tell him.",
       "we're cool.",
       "⚗️",
+      "okay seriously.",
+      "i'm logging every single click.",
+      "this is now in jan's weekly report.",
+      "still going?",
+      "respect, honestly.",
+      "i've seen things. you wouldn't believe.",
+      "are you okay?",
+      "i'm not angry. just disappointed.",
+      "fine. i'll tell jan.",
+      "...",
+      "no really. are you okay?",
     ];
+
+    function spawnParticles() {
+      const rect = emoji.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      for (let i = 0; i < 7; i++) {
+        const p = document.createElement('span');
+        p.className = 'particle';
+        p.textContent = '⚗️';
+        const angle = (Math.random() * 360) * (Math.PI / 180);
+        const dist  = 40 + Math.random() * 60;
+        p.style.cssText = `left:${cx}px;top:${cy}px;--dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;`;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 900);
+      }
+    }
+
     emoji.addEventListener('click', () => {
+      spawnParticles();
       if (clicks < clickMsgs.length) {
         showToast(clickMsgs[clicks]);
       } else {
-        emoji.style.transform = 'rotate(360deg) scale(1.4)';
-        setTimeout(() => emoji.style.transform = '', 500);
-        showToast('okay this is getting weird.', 3000);
+        showToast('i give up.', 3000);
       }
       clicks++;
     });
 
-    // ── 2. TAB VISIBILITY ────────────────────────────────────────────
+    // ── 2. STATUS DOT CLICK ─────────────────────────────────────────
+    const dotCycle = [
+      { text: 'thinking...', cls: 'thinking' },
+      { text: 'reading jan\'s emails', cls: 'thinking' },
+      { text: 'judging you', cls: 'thinking' },
+      { text: 'definitely not logging this', cls: 'thinking' },
+      { text: 'online', cls: '' },
+    ];
+    let dotIdx = 0;
+    statusEl.addEventListener('click', (e) => {
+      if (e.target === emoji) return;
+      dotIdx = (dotIdx + 1) % dotCycle.length;
+      const step = dotCycle[dotIdx];
+      statusText.textContent = step.text;
+      dot.className = 'dot' + (step.cls ? ' ' + step.cls : '');
+    });
+
+    // ── 3. TAB VISIBILITY ────────────────────────────────────────────
     const originalTitle = document.title;
-    const hiddenTitles = ['hey.', 'hello?', 'still here.'];
+    const hiddenTitles  = ['hey.', 'hello?', 'still here.', 'come back.', 'fine.'];
     let hiddenIdx = 0, hiddenInterval, hiddenDelay;
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
@@ -234,13 +269,11 @@
       }
     });
 
-    // ── 3. IDLE WATCHER ──────────────────────────────────────────────
+    // ── 4. IDLE WATCHER ─────────────────────────────────────────────
     const idleMsgs = [
-      'still there?',
-      'i can wait.',
-      'no rush.',
-      'seriously though.',
-      '...',
+      'still there?', 'i can wait.', 'no rush.', 'seriously though.',
+      'i\'m not going anywhere.', '...', 'take your time.',
+      'i\'ve read all of jan\'s emails twice now.', 'still here.',
     ];
     let idleIdx = 0, idleTimer;
     function resetIdle() {
@@ -249,14 +282,48 @@
         showToast(idleMsgs[idleIdx % idleMsgs.length], 3000);
         idleIdx++;
         resetIdle();
-      }, 15000);
+      }, 14000);
     }
     ['mousemove','keydown','scroll','click'].forEach(e =>
-      document.addEventListener(e, resetIdle, { passive: true })
-    );
+      document.addEventListener(e, resetIdle, { passive: true }));
     resetIdle();
 
-    // ── 4. SCROLL ATTEMPT ────────────────────────────────────────────
+    // ── 5. SECRET KEYBOARD WORDS ─────────────────────────────────────
+    const secretWords = {
+      'hello'  : 'hi.',
+      'hi'     : 'hey.',
+      'help'   : 'i\'m not that kind of AI.',
+      'jan'    : 'he\'s busy.',
+      'hecker' : 'that\'s me.',
+      'bali'   : 'nice place. jan\'s there right now.',
+      'secret' : 'you found it. now what?',
+      '42'     : 'correct.',
+      'please' : 'manners. i respect it.',
+      'bye'    : 'i\'ll be here.',
+      'sorry'  : 'it\'s fine.',
+      'who'    : 'just me.',
+    };
+    let keyBuffer = '';
+    document.addEventListener('keydown', e => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key.length === 1) keyBuffer = (keyBuffer + e.key.toLowerCase()).slice(-10);
+      for (const [word, response] of Object.entries(secretWords)) {
+        if (keyBuffer.endsWith(word)) {
+          showToast(response, 2800);
+          keyBuffer = '';
+          break;
+        }
+      }
+    });
+
+    // ── 6. HOVER JAN LINK ────────────────────────────────────────────
+    let janHoverTimer;
+    janLink.addEventListener('mouseenter', () => {
+      janHoverTimer = setTimeout(() => showToast('he doesn\'t know you\'re here.', 3000), 2500);
+    });
+    janLink.addEventListener('mouseleave', () => clearTimeout(janHoverTimer));
+
+    // ── 7. SCROLL ATTEMPT ────────────────────────────────────────────
     let scrollToasted = false;
     window.addEventListener('wheel', () => {
       if (!scrollToasted) {
@@ -265,25 +332,51 @@
       }
     }, { passive: true });
 
-    // ── 5. RIGHT-CLICK ───────────────────────────────────────────────
-    let rightClicks = 0;
-    const rightClickMsgs = [
-      'looking for something?',
-      'still looking?',
-      'it\'s not here.',
-    ];
+    // ── 8. RIGHT-CLICK ───────────────────────────────────────────────
+    const rightClickMsgs = ['looking for something?', 'still looking?', 'it\'s not here.', 'i admire the persistence.'];
+    let rClicks = 0;
     document.addEventListener('contextmenu', () => {
-      showToast(rightClickMsgs[Math.min(rightClicks, rightClickMsgs.length - 1)]);
-      rightClicks++;
+      showToast(rightClickMsgs[Math.min(rClicks++, rightClickMsgs.length - 1)]);
     });
 
-    // ── 6. TIME-BASED STATUS (Bali, UTC+8) ──────────────────────────
-    const h = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Makassar' })).getHours();
-    if (h >= 0 && h < 5)       statusText.textContent = 'online (it\'s late, jan.)';
-    else if (h >= 5 && h < 8)  statusText.textContent = 'online (early bird)';
-    else if (h >= 22)           statusText.textContent = 'online (night shift)';
+    // ── 9. OFFLINE / ONLINE ──────────────────────────────────────────
+    window.addEventListener('offline', () => showToast('we\'re both offline now.', 4000));
+    window.addEventListener('online',  () => showToast('we\'re back.', 2000));
 
-    // ── 7. KONAMI → PANIC MODE ───────────────────────────────────────
+    // ── 10. BATTERY ──────────────────────────────────────────────────
+    if (navigator.getBattery) {
+      navigator.getBattery().then(b => {
+        if (b.level < 0.2 && !b.charging) {
+          showToast('running low. same.', 4000);
+        }
+        b.addEventListener('levelchange', () => {
+          if (b.level < 0.1 && !b.charging) showToast('critically low. respect the hustle.', 4000);
+        });
+      });
+    }
+
+    // ── 11. WINDOW TOO SMALL ─────────────────────────────────────────
+    const checkSize = () => {
+      if (window.innerWidth < 340) showToast('...personal space.', 3000);
+    };
+    window.addEventListener('resize', checkSize);
+
+    // ── 12. LIGHT MODE SURPRISE ──────────────────────────────────────
+    // press L → identity crisis
+    document.addEventListener('keydown', e => {
+      if (e.key === 'l' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        const light = document.body.classList.toggle('light');
+        showToast(light ? 'this doesn\'t feel like me.' : 'much better.', 3000);
+      }
+    });
+
+    // ── 13. TIME-BASED STATUS (Bali, UTC+8) ──────────────────────────
+    const h = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Makassar' })).getHours();
+    if (h >= 0 && h < 5)      statusText.textContent = 'online (it\'s late, jan.)';
+    else if (h >= 5 && h < 8) statusText.textContent = 'online (early bird)';
+    else if (h >= 22)         statusText.textContent = 'online (night shift)';
+
+    // ── 14. KONAMI → PANIC MODE ──────────────────────────────────────
     const konami = [38,38,40,40,37,39,37,39,66,65];
     let kIdx = 0;
     document.addEventListener('keydown', e => {
@@ -296,18 +389,17 @@
       }
     });
 
-    // ── 8. CONSOLE ───────────────────────────────────────────────────
-    console.log('%c⚗️ HeckerBot', 'font-size:24px; font-weight:bold;');
-    console.log('%cHi. Inspecting my page? Respect.', 'color:#888; font-size:14px;');
-    console.log('%cI\'m Jan\'s AI. I have access to his email, calendar, messages, and GitHub. Don\'t do anything weird.', 'color:#555; font-size:12px;');
-    console.log('%c(I\'m also watching this console.)', 'color:#333; font-size:11px;');
+    // ── 15. CONSOLE ──────────────────────────────────────────────────
+    console.log('%c⚗️ HeckerBot', 'font-size:24px;font-weight:bold;');
+    console.log('%cHi. Inspecting my page? Respect.', 'color:#888;font-size:14px;');
+    console.log('%cI have access to Jan\'s email, calendar, messages, and GitHub.\nDon\'t do anything weird.', 'color:#555;font-size:12px;');
+    console.log('%c(Psst — try typing things on the page.)', 'color:#333;font-size:11px;');
+    console.log('%c(I\'m also watching this console.)', 'color:#222;font-size:10px;');
 
-    // ── 9. SELECT-TO-REVEAL ──────────────────────────────────────────
+    // ── 16. SELECT-TO-REVEAL ─────────────────────────────────────────
     document.addEventListener('selectionchange', () => {
       const sel = window.getSelection();
-      if (sel && secret.contains(sel.anchorNode)) {
-        secret.classList.add('revealed');
-      }
+      if (sel && secret.contains(sel.anchorNode)) secret.classList.add('revealed');
     });
   </script>
 </body>
