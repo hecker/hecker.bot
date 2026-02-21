@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jan Hecker</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0a0a0a;
+      color: #e8e8e8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 480px;
+      padding: 2rem;
+    }
+
+    .name {
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .role {
+      font-size: 1rem;
+      color: #888;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .role a {
+      color: #aaa;
+      text-decoration: none;
+      border-bottom: 1px solid #333;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .role a:hover {
+      color: #fff;
+      border-color: #666;
+    }
+
+    .links {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .links a {
+      font-size: 0.9rem;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .links a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="name">Jan Hecker</div>
+    <div class="role">
+      Co-founder at <a href="https://aniva.health" target="_blank">Aniva Health</a> —
+      preventive healthcare, built in Europe.
+    </div>
+    <div class="links">
+      <a href="https://github.com/hecker" target="_blank">GitHub</a>
+      <a href="https://linkedin.com/in/janhecker" target="_blank">LinkedIn</a>
+      <a href="mailto:jan@hecker.vc">Email</a>
+    </div>
+  </div>
+</body>
+</html>
