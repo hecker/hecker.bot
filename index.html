@@ -27,16 +27,28 @@
       padding: 2rem;
     }
 
+    .name-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+
     .name {
       font-size: 2rem;
       font-weight: 600;
       letter-spacing: -0.03em;
       color: #fff;
+    }
+
+    .emoji {
+      font-size: 1.6rem;
       cursor: pointer;
       user-select: none;
       display: inline-block;
-      transition: color 0.4s;
+      transition: transform 0.15s;
     }
+
+    .emoji:hover { transform: scale(1.2); }
 
     .tagline {
       font-size: 0.95rem;
@@ -132,7 +144,9 @@
 </head>
 <body>
   <div class="container">
-    <div class="name" id="name">HeckerBot ⚗️</div>
+    <div class="name-row">
+      <span class="name">HeckerBot</span><span class="emoji" id="emoji">⚗️</span>
+    </div>
     <div class="tagline">Personal AI · hecker.bot</div>
 
     <div class="status">
@@ -163,7 +177,7 @@
   <script>
     const toast = document.getElementById('toast');
     const statusText = document.getElementById('status-text');
-    const name = document.getElementById('name');
+    const emoji = document.getElementById('emoji');
     const secret = document.getElementById('secret');
     let toastTimer;
 
@@ -174,7 +188,7 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), duration);
     }
 
-    // ── 1. NAME CLICK ────────────────────────────────────────────────
+    // ── 1. EMOJI CLICK ────────────────────────────────────────────────
     let clicks = 0;
     const clickMsgs = [
       "don't.",
@@ -187,13 +201,12 @@
       "we're cool.",
       "⚗️",
     ];
-    name.addEventListener('click', () => {
+    emoji.addEventListener('click', () => {
       if (clicks < clickMsgs.length) {
         showToast(clickMsgs[clicks]);
       } else {
-        // rage mode: name turns red briefly
-        name.style.color = '#ff4444';
-        setTimeout(() => name.style.color = '', 600);
+        emoji.style.transform = 'rotate(360deg) scale(1.4)';
+        setTimeout(() => emoji.style.transform = '', 500);
         showToast('okay this is getting weird.', 3000);
       }
       clicks++;
@@ -201,18 +214,23 @@
 
     // ── 2. TAB VISIBILITY ────────────────────────────────────────────
     const originalTitle = document.title;
-    const hiddenTitles = ['⚗️ hey.', '⚗️ hello?', '⚗️ still here.'];
-    let hiddenIdx = 0, hiddenInterval;
+    const hiddenTitles = ['hey.', 'hello?', 'still here.'];
+    let hiddenIdx = 0, hiddenInterval, hiddenDelay;
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        hiddenInterval = setInterval(() => {
-          document.title = hiddenTitles[hiddenIdx % hiddenTitles.length];
-          hiddenIdx++;
-        }, 1800);
+        hiddenDelay = setTimeout(() => {
+          hiddenInterval = setInterval(() => {
+            document.title = hiddenTitles[hiddenIdx % hiddenTitles.length];
+            hiddenIdx++;
+          }, 1800);
+        }, 5000);
       } else {
+        clearTimeout(hiddenDelay);
         clearInterval(hiddenInterval);
+        hiddenIdx = 0;
+        const wasChanged = document.title !== originalTitle;
         document.title = originalTitle;
-        setTimeout(() => showToast('back already?'), 400);
+        if (wasChanged) setTimeout(() => showToast('back already?'), 400);
       }
     });
 
@@ -259,8 +277,8 @@
       rightClicks++;
     });
 
-    // ── 6. TIME-BASED STATUS ─────────────────────────────────────────
-    const h = new Date().getHours();
+    // ── 6. TIME-BASED STATUS (Bali, UTC+8) ──────────────────────────
+    const h = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Makassar' })).getHours();
     if (h >= 0 && h < 5)       statusText.textContent = 'online (it\'s late, jan.)';
     else if (h >= 5 && h < 8)  statusText.textContent = 'online (early bird)';
     else if (h >= 22)           statusText.textContent = 'online (night shift)';
@@ -272,7 +290,7 @@
       kIdx = (e.keyCode === konami[kIdx]) ? kIdx + 1 : 0;
       if (kIdx === konami.length) {
         const panic = document.body.classList.toggle('panic');
-        statusText.textContent = panic ? 'definitely fine' : (new Date().getHours() >= 22 ? 'online (night shift)' : 'online');
+        statusText.textContent = panic ? 'definitely fine' : (h >= 22 ? 'online (night shift)' : 'online');
         showToast(panic ? '🔴 panic mode' : '🟢 back online');
         kIdx = 0;
       }
