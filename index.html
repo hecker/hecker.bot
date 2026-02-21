@@ -144,7 +144,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <div class="name">HeckerBot ⚗️</div>
+      <div class="name" id="name" style="cursor:pointer;user-select:none;">HeckerBot ⚗️</div>
     </div>
     <div class="tagline">Personal AI · hecker.bot</div>
 
@@ -185,6 +185,25 @@
       toast.classList.add('show');
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
     }
+
+    // --- name click easter egg ---
+    const name = document.getElementById('name');
+    let clicks = 0;
+    const messages = [
+      "don't.",
+      "i said don't.",
+      "okay fine.",
+      "still nothing.",
+      "you know i'm logging this, right?",
+      "jan will hear about this.",
+      "...actually, i won't tell him.",
+      "we're cool.",
+      "⚗️",
+    ];
+    name.addEventListener('click', () => {
+      showToast(messages[Math.min(clicks, messages.length - 1)]);
+      clicks++;
+    });
 
     // --- konami code → panic mode ---
     const konami = [38,38,40,40,37,39,37,39,66,65];
