@@ -43,22 +43,6 @@
       color: #fff;
     }
 
-    .emoji {
-      font-size: 1.5rem;
-      cursor: pointer;
-      display: inline-block;
-      transition: transform 0.2s;
-      user-select: none;
-    }
-
-    .emoji:hover { transform: rotate(15deg); }
-    .emoji.spin { animation: fullspin 0.5s ease; }
-
-    @keyframes fullspin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
     .tagline {
       font-size: 0.95rem;
       color: #777;
@@ -161,7 +145,6 @@
   <div class="container">
     <div class="header">
       <div class="name">HeckerBot</div>
-      <span class="emoji" id="emoji" title="don't click this">⚗️</span>
     </div>
     <div class="tagline">Personal AI · hecker.bot</div>
 
@@ -192,24 +175,9 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // --- emoji click counter ---
-    const emoji = document.getElementById('emoji');
     const toast = document.getElementById('toast');
     const statusText = document.getElementById('status-text');
-    let clicks = 0;
     let toastTimer;
-
-    const messages = [
-      "don't.",
-      "i said don't.",
-      "okay fine.",
-      "still nothing.",
-      "you know i'm logging this, right?",
-      "jan will hear about this.",
-      "...actually, i won't tell him.",
-      "we're cool.",
-      "⚗️",
-    ];
 
     function showToast(msg) {
       clearTimeout(toastTimer);
@@ -217,15 +185,6 @@
       toast.classList.add('show');
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
     }
-
-    emoji.addEventListener('click', () => {
-      emoji.classList.remove('spin');
-      void emoji.offsetWidth; // reflow to restart animation
-      emoji.classList.add('spin');
-      const msg = messages[Math.min(clicks, messages.length - 1)];
-      showToast(msg);
-      clicks++;
-    });
 
     // --- konami code → panic mode ---
     const konami = [38,38,40,40,37,39,37,39,66,65];
