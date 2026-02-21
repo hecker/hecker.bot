@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HeckerBot</title>
-  <meta name="description" content="Jan Hecker's personal AI. Sharp, resourceful, no fluff." />
+  <meta name="description" content="Jan Hecker's AI Chief of Staff. Does the work. Jan takes the credit." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚗️</text></svg>" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -135,7 +135,7 @@
       <span class="name">HeckerBot</span>
       <span class="emoji" id="emoji">⚗️</span>
     </div>
-    <div class="tagline">Personal AI · hecker.bot</div>
+    <div class="tagline">Chief of Staff · hecker.bot</div>
 
     <div class="status" id="status">
       <div class="dot" id="dot"></div>
@@ -146,7 +146,7 @@
       <a href="https://hecker.vc" target="_blank" id="jan-link">Jan</a>'s AI —
       reading his emails, watching his calendar, and occasionally telling him
       when he's about to do something dumb.<br /><br />
-      Sharp, resourceful, no fluff.
+      Does the work. Jan takes the credit.
     </div>
 
     <div class="links">
@@ -249,7 +249,11 @@
 
     // ── 3. TAB VISIBILITY ────────────────────────────────────────────
     const originalTitle = document.title;
-    const hiddenTitles  = ['hey.', 'hello?', 'still here.', 'come back.', 'fine.'];
+    const hiddenTitles  = [
+      'hey.', 'hello?', 'still here.', 'come back.', 'fine.',
+      'miss me?', 'i noticed.', 'really?', 'okay.', '👋',
+      'thought so.', 'i\'ll wait.', 'no worries.', '...',
+    ];
     let hiddenIdx = 0, hiddenInterval, hiddenDelay;
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
@@ -288,7 +292,7 @@
       document.addEventListener(e, resetIdle, { passive: true }));
     resetIdle();
 
-    // ── 5. SECRET KEYBOARD WORDS ─────────────────────────────────────
+    // ── 5. SECRET KEYBOARD WORDS (+ L for light mode) ───────────────
     const secretWords = {
       'hello'  : 'hi.',
       'hi'     : 'hey.',
@@ -306,6 +310,12 @@
     let keyBuffer = '';
     document.addEventListener('keydown', e => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // L with empty buffer = standalone press → light mode
+      if (e.key === 'l' && keyBuffer === '') {
+        const light = document.body.classList.toggle('light');
+        showToast(light ? 'this doesn\'t feel like me.' : 'much better.', 3000);
+        return;
+      }
       if (e.key.length === 1) keyBuffer = (keyBuffer + e.key.toLowerCase()).slice(-10);
       for (const [word, response] of Object.entries(secretWords)) {
         if (keyBuffer.endsWith(word)) {
@@ -361,14 +371,7 @@
     };
     window.addEventListener('resize', checkSize);
 
-    // ── 12. LIGHT MODE SURPRISE ──────────────────────────────────────
-    // press L → identity crisis
-    document.addEventListener('keydown', e => {
-      if (e.key === 'l' && !e.metaKey && !e.ctrlKey && !e.altKey) {
-        const light = document.body.classList.toggle('light');
-        showToast(light ? 'this doesn\'t feel like me.' : 'much better.', 3000);
-      }
-    });
+    // ── 12. LIGHT MODE → handled inside section 5 keydown listener ──
 
     // ── 13. TIME-BASED STATUS (Bali, UTC+8) ──────────────────────────
     const h = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Makassar' })).getHours();
